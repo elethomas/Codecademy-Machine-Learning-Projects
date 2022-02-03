@@ -1,1 +1,34 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+import matplotlib.pyplot as plt
 
+# Importing and investigating the data
+flags = pd.read_csv('flags.csv', header = 0)
+#print(flags.head)
+#print(flags.info())
+#print(flags.columns)
+
+# Creating features and labels
+labels = flags.Landmass
+#print(labels)
+data = flags[["Red", "Green", "Blue", "Gold", "White", "Black", "Orange", "Circles", "Crosses","Saltires","Quarters","Sunstars", "Crescent","Triangle"]]
+
+# Split the data
+train_data, test_data, train_labels, test_labels = train_test_split(data, labels, random_state = 1)
+
+scores = []
+# Loop through depths
+for i in range(1, 21):
+  # Create Decision Tree Classifier
+  tree = DecisionTreeClassifier(random_state = 1, max_depth = i)
+  # Fit the tree
+  tree.fit(train_data, train_labels)
+
+  # Append the score to scores
+  score = tree.score(test_data, test_labels)
+  scores.append(score)
+
+# Plot points
+plt.plot(range(1, 21), scores)
+plt.show()
